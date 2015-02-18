@@ -6,6 +6,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.RelativeLayout;
 
 import com.kerboocorp.galleryandroid.R;
 import com.kerboocorp.galleryandroid.adapters.AlbumAdapter;
+import com.kerboocorp.galleryandroid.managers.AlbumManager;
+import com.kerboocorp.galleryandroid.managers.services.AlbumService;
 import com.kerboocorp.galleryandroid.model.Album;
 
 import java.util.ArrayList;
@@ -20,6 +23,9 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -48,29 +54,22 @@ public class MainActivity extends ActionBarActivity {
         albumAdapter = new AlbumAdapter(R.layout.list_item_album, this);
         albumListView.setAdapter(albumAdapter);
 
-        List<Album> albumList = new ArrayList<Album>();
 
-        Album album = new Album();
-        albumList.add(album);
+        AlbumManager.getAlbumService().findAlbumList(new Callback<List<Album>>() {
+            @Override
+            public void success(List<Album> albums, Response response) {
+                Log.d("TEST", "OKEEE");
+                albumAdapter.addAlbumList(albums);
+                progressLayout.setVisibility(View.GONE);
+            }
 
-        album = new Album();
-        albumList.add(album);
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d("TEST", "OH NEEEEE");
+                progressLayout.setVisibility(View.GONE);
 
-        album = new Album();
-        albumList.add(album);
-
-        album = new Album();
-        albumList.add(album);
-
-        album = new Album();
-        albumList.add(album);
-
-        album = new Album();
-        albumList.add(album);
-
-        albumAdapter.addAlbumList(albumList);
-
-        progressLayout.setVisibility(View.GONE);
+            }
+        });
     }
 
 

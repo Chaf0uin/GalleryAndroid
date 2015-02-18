@@ -3,6 +3,7 @@ package com.kerboocorp.galleryandroid.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import com.fmsirvent.ParallaxEverywhere.PEWImageView;
 import com.kerboocorp.galleryandroid.R;
 import com.kerboocorp.galleryandroid.activities.AlbumActivity;
 import com.kerboocorp.galleryandroid.model.Album;
+import com.kerboocorp.galleryandroid.utilities.Parameters;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -81,6 +84,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             final AlbumViewHolder albumViewHolder = (AlbumViewHolder) viewHolder;
             Album album = albumList.get(i);
+
+            albumViewHolder.titleTextView.setText(album.getName());
+
+            String url = Parameters.baseURL + album.getToken();
+            Log.d("TEST", url);
+
+            Picasso.with(context).load(Parameters.baseURL + album.getToken()).into(albumViewHolder.albumImageView);
 
         }
 
